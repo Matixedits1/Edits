@@ -1001,11 +1001,10 @@ buttons.forEach(button=>{
 
     /* AGREGAR */
 
-  cart.push({
-  name: button.dataset.name,
-  price: parseInt(button.dataset.price),
-  type: type
-});
+    cart.push({
+      name:button.dataset.name,
+      price:parseInt(button.dataset.price)
+    });
 
     /* EFECTOS */
 
@@ -1038,21 +1037,6 @@ buttons.forEach(button=>{
 /* =========================
    ACTUALIZAR CARRITO
 ========================= */
-function getCartType(){
-
-  let hasEdit = cart.some(item => item.type === "edit");
-  let hasIntro = cart.some(item => item.type === "intro");
-
-  if(hasEdit && hasIntro){
-    return "mixed";
-  }
-
-  if(hasIntro){
-    return "intro-only";
-  }
-
-  return "edit-only";
-}
 
 function updateCart(){
 
@@ -1173,42 +1157,7 @@ function toggleCart(){
 /* =========================
    CHECKOUT GAMER
 ========================= */
-/* =========================
-   DETECTAR TIPO DE CARRITO
-========================= */
 
-function getCartType(){
-
-  let hasEdit = false;
-  let hasIntro = false;
-
-  cart.forEach((item)=>{
-
-    if(item.name.includes("EDIT")){
-      hasEdit = true;
-    }
-
-    if(item.name.includes("INTRO")){
-      hasIntro = true;
-    }
-
-  });
-
-  if(hasEdit && hasIntro){
-    return "mixed";
-  }
-
-  if(hasEdit){
-    return "edit-only";
-  }
-
-  if(hasIntro){
-    return "intro-only";
-  }
-
-  return "empty";
-
-}
 function checkout(){
 
   if(cart.length === 0){
@@ -1224,21 +1173,7 @@ function checkout(){
   loading.style.display = "flex";
 
   setTimeout(()=>{
-const cartType = getCartType();
 
-let tipoMensaje = "";
-
-if(cartType === "mixed"){
-  tipoMensaje = "⚠️ COMPRA MIXTA (EDIT + INTRO)";
-}
-
-if(cartType === "edit-only"){
-  tipoMensaje = "🎬 SOLO EDITS";
-}
-
-if(cartType === "intro-only"){
-  tipoMensaje = "🎬 SOLO INTROS";
-}
     let total = 0;
 
     let productos = "";
@@ -1260,10 +1195,8 @@ if(cartType === "intro-only"){
     /* MENSAJE */
 
     const mensaje = `
-🔥 TIPO DE COMPRA:
-${tipoMensaje}
+🔥 COMPRA GAMER ACTIVADA 🔥
 
-━━━━━━━━━━━━━━
 ━━━━━━━━━━━━━━
 
 ${productos}
@@ -1283,12 +1216,24 @@ $${totalUsd}
 🎵 Música:
 (Escribir aquí)
 
-━━━━━━━━━━━━━━
+🔥 Estilo:
+(Sobrecargado, limpio, neón, fuego, etc.)
 
+✒️DATOS DE LA INTRO
+
+🎨 Color principal:
+(Escribir aquí)
+
+🎨 Color secundario:
+(Escribir aquí)
+
+📝 Texto:
+(Escribir aquí)
+
+🛡️ ¿Quiere logo?
+(Sí o no)
 🔥 MATIX EDITS
 `;
-
-
 
     /* NUMERO */
 
