@@ -1338,7 +1338,7 @@ ${datosExtra}
 🔥 MATIX EDITS
 `;
 
-    /* NUMERO */
+   /* NUMERO */
 
     const numero = "595983744536";
 
@@ -1346,6 +1346,14 @@ ${datosExtra}
 
     const mensajeCodificado =
       encodeURIComponent(mensaje);
+
+    /* UNIVERSAL:
+       FUNCIONA EN
+       ✅ MÓVIL
+       ✅ PC
+       ✅ WHATSAPP WEB
+       ✅ APP WHATSAPP
+    */
 
     const url =
       `https://api.whatsapp.com/send?phone=${numero}&text=${mensajeCodificado}`;
@@ -1367,6 +1375,13 @@ ${datosExtra}
   },2000);
 
 }
+
+/* =========================
+   INICIAR
+========================= */
+
+updateCart();
+
 </script>
 </body>  
 </html>
