@@ -1192,9 +1192,107 @@ function checkout(){
 
     const totalUsd = (total / usdRate).toFixed(2);
 
-    /* MENSAJE */
+  /* =========================
+   DETECTAR QUÉ COMPRÓ
+========================= */
 
-    const mensaje = `
+const tieneEdit = cart.some(item =>
+  item.name.includes("EDIT")
+);
+
+const tieneIntro = cart.some(item =>
+  item.name.includes("INTRO")
+);
+
+let datosCompra = "";
+
+/* SOLO EDIT */
+
+if(tieneEdit && !tieneIntro){
+
+  datosCompra = `
+🎬 DATOS DEL VIDEO
+
+🎵 Música:
+(Escribir aquí)
+
+
+📱 Plataforma:
+(TikTok / YouTube)
+
+`;
+
+}
+
+/* SOLO INTRO */
+
+else if(!tieneEdit && tieneIntro){
+
+  datosCompra = `
+✒️ DATOS DE LA INTRO
+
+🎨 Color principal:
+(Escribir aquí)
+
+🎨 Color secundario:
+(Escribir aquí)
+
+📝 Texto:
+(Escribir aquí)
+
+🛡️ ¿Quiere logo?
+(Sí o no)
+
+⚡ Estilo:
+(Fuego, neón, oscuro, etc.)
+`;
+
+}
+
+/* AMBOS */
+
+else if(tieneEdit && tieneIntro){
+
+  datosCompra = `
+🎬 DATOS DEL VIDEO
+
+🎵 Música:
+(Escribir aquí)
+
+🔥 Estilo:
+(Sobrecargado, limpio, neón, fuego, etc.)
+
+📱 Plataforma:
+(TikTok / YouTube)
+
+🎮 Descripción:
+(Escribir aquí)
+
+━━━━━━━━━━━━━━
+
+✒️ DATOS DE LA INTRO
+
+🎨 Color principal:
+(Escribir aquí)
+
+🎨 Color secundario:
+(Escribir aquí)
+
+📝 Texto:
+(Escribir aquí)
+
+🛡️ ¿Quiere logo?
+(Sí o no)
+
+⚡ Estilo:
+(Fuego, neón, oscuro, etc.)
+`;
+
+}
+
+/* MENSAJE */
+
+const mensaje = `
 🔥 COMPRA GAMER ACTIVADA 🔥
 
 ━━━━━━━━━━━━━━
@@ -1211,30 +1309,12 @@ $${totalUsd}
 
 ━━━━━━━━━━━━━━
 
-🎬 DATOS DEL VIDEO
+${datosCompra}
 
-🎵 Música:
-(Escribir aquí)
+━━━━━━━━━━━━━━
 
-🔥 Estilo:
-(Sobrecargado, limpio, neón, fuego, etc.)
-
-✒️DATOS DE LA INTRO
-
-🎨 Color principal:
-(Escribir aquí)
-
-🎨 Color secundario:
-(Escribir aquí)
-
-📝 Texto:
-(Escribir aquí)
-
-🛡️ ¿Quiere logo?
-(Sí o no)
 🔥 MATIX EDITS
 `;
-
     /* NUMERO */
 
     const numero = "595983744536";
