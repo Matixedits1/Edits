@@ -1174,6 +1174,22 @@ function checkout(){
 
   setTimeout(()=>{
 
+    const cartType = getCartType();
+
+    let tipoMensaje = "";
+
+    if(cartType === "mixed"){
+      tipoMensaje = "⚠️ COMPRA MIXTA (EDIT + INTRO)";
+    }
+
+    if(cartType === "edit-only"){
+      tipoMensaje = "🎬 SOLO EDITS";
+    }
+
+    if(cartType === "intro-only"){
+      tipoMensaje = "🎨 SOLO INTROS";
+    }
+
     let total = 0;
 
     let productos = "";
@@ -1192,11 +1208,115 @@ function checkout(){
 
     const totalUsd = (total / usdRate).toFixed(2);
 
+    /* =========================
+       MENSAJE SEGÚN COMPRA
+    ========================= */
+
+    let datosExtra = "";
+
+    const tieneEdit = cart.some(item =>
+      item.name.includes("EDIT")
+    );
+
+    const tieneIntro = cart.some(item =>
+      item.name.includes("INTRO")
+    );
+
+    /* SOLO EDITS */
+
+    if(tieneEdit && !tieneIntro){
+
+      datosExtra = `
+🎬 DATOS DEL VIDEO
+
+🎵 Música:
+(Escribir aquí)
+
+🔥 Estilo:
+(Sobrecargado, limpio, neón, fuego, etc.)
+
+📱 Plataforma:
+(TikTok / YouTube)
+
+🎮 Descripción:
+(Escribir aquí)
+`;
+
+    }
+
+    /* SOLO INTROS */
+
+    else if(!tieneEdit && tieneIntro){
+
+      datosExtra = `
+🎨 DATOS DE LA INTRO
+
+🎨 Color principal:
+(Escribir aquí)
+
+🎨 Color secundario:
+(Escribir aquí)
+
+📝 Texto:
+(Escribir aquí)
+
+🛡️ ¿Quiere logo?
+(Sí o no)
+
+⚡ Estilo:
+(Fuego, neón, oscuro, etc.)
+`;
+
+    }
+
+    /* AMBOS */
+
+    else if(tieneEdit && tieneIntro){
+
+      datosExtra = `
+🎬 DATOS DEL VIDEO
+
+🎵 Música:
+(Escribir aquí)
+
+🔥 Estilo:
+(Sobrecargado, limpio, neón, fuego, etc.)
+
+📱 Plataforma:
+(TikTok / YouTube)
+
+🎮 Descripción:
+(Escribir aquí)
+
+━━━━━━━━━━━━━━
+
+🎨 DATOS DE LA INTRO
+
+🎨 Color principal:
+(Escribir aquí)
+
+🎨 Color secundario:
+(Escribir aquí)
+
+📝 Texto:
+(Escribir aquí)
+
+🛡️ ¿Quiere logo?
+(Sí o no)
+
+⚡ Estilo:
+(Fuego, neón, oscuro, etc.)
+`;
+
+    }
+
     /* MENSAJE */
 
     const mensaje = `
-🔥 COMPRA GAMER ACTIVADA 🔥
+🔥 TIPO DE COMPRA:
+${tipoMensaje}
 
+━━━━━━━━━━━━━━
 ━━━━━━━━━━━━━━
 
 ${productos}
@@ -1211,27 +1331,10 @@ $${totalUsd}
 
 ━━━━━━━━━━━━━━
 
-🎬 DATOS DEL VIDEO
+${datosExtra}
 
-🎵 Música:
-(Escribir aquí)
+━━━━━━━━━━━━━━
 
-🔥 Estilo:
-(Sobrecargado, limpio, neón, fuego, etc.)
-
-✒️DATOS DE LA INTRO
-
-🎨 Color principal:
-(Escribir aquí)
-
-🎨 Color secundario:
-(Escribir aquí)
-
-📝 Texto:
-(Escribir aquí)
-
-🛡️ ¿Quiere logo?
-(Sí o no)
 🔥 MATIX EDITS
 `;
 
@@ -1243,14 +1346,6 @@ $${totalUsd}
 
     const mensajeCodificado =
       encodeURIComponent(mensaje);
-
-    /* UNIVERSAL:
-       FUNCIONA EN
-       ✅ MÓVIL
-       ✅ PC
-       ✅ WHATSAPP WEB
-       ✅ APP WHATSAPP
-    */
 
     const url =
       `https://api.whatsapp.com/send?phone=${numero}&text=${mensajeCodificado}`;
@@ -1272,13 +1367,6 @@ $${totalUsd}
   },2000);
 
 }
-
-/* =========================
-   INICIAR
-========================= */
-
-updateCart();
-
 </script>
 </body>  
 </html>
