@@ -1001,10 +1001,11 @@ buttons.forEach(button=>{
 
     /* AGREGAR */
 
-    cart.push({
-      name:button.dataset.name,
-      price:parseInt(button.dataset.price)
-    });
+  cart.push({
+  name: button.dataset.name,
+  price: parseInt(button.dataset.price),
+  type: type
+});
 
     /* EFECTOS */
 
@@ -1037,6 +1038,21 @@ buttons.forEach(button=>{
 /* =========================
    ACTUALIZAR CARRITO
 ========================= */
+function getCartType(){
+
+  let hasEdit = cart.some(item => item.type === "edit");
+  let hasIntro = cart.some(item => item.type === "intro");
+
+  if(hasEdit && hasIntro){
+    return "mixed";
+  }
+
+  if(hasIntro){
+    return "intro-only";
+  }
+
+  return "edit-only";
+}
 
 function updateCart(){
 
@@ -1157,7 +1173,42 @@ function toggleCart(){
 /* =========================
    CHECKOUT GAMER
 ========================= */
+/* =========================
+   DETECTAR TIPO DE CARRITO
+========================= */
 
+function getCartType(){
+
+  let hasEdit = false;
+  let hasIntro = false;
+
+  cart.forEach((item)=>{
+
+    if(item.name.includes("EDIT")){
+      hasEdit = true;
+    }
+
+    if(item.name.includes("INTRO")){
+      hasIntro = true;
+    }
+
+  });
+
+  if(hasEdit && hasIntro){
+    return "mixed";
+  }
+
+  if(hasEdit){
+    return "edit-only";
+  }
+
+  if(hasIntro){
+    return "intro-only";
+  }
+
+  return "empty";
+
+}
 function checkout(){
 
   if(cart.length === 0){
@@ -1173,23 +1224,21 @@ function checkout(){
   loading.style.display = "flex";
 
   setTimeout(()=>{
+const cartType = getCartType();
 
-    const cartType = getCartType();
+let tipoMensaje = "";
 
-    let tipoMensaje = "";
+if(cartType === "mixed"){
+  tipoMensaje = "⚠️ COMPRA MIXTA (EDIT + INTRO)";
+}
 
-    if(cartType === "mixed"){
-      tipoMensaje = "⚠️ COMPRA MIXTA (EDIT + INTRO)";
-    }
+if(cartType === "edit-only"){
+  tipoMensaje = "🎬 SOLO EDITS";
+}
 
-    if(cartType === "edit-only"){
-      tipoMensaje = "🎬 SOLO EDITS";
-    }
-
-    if(cartType === "intro-only"){
-      tipoMensaje = "🎨 SOLO INTROS";
-    }
-
+if(cartType === "intro-only"){
+  tipoMensaje = "🎬 SOLO INTROS";
+}
     let total = 0;
 
     let productos = "";
@@ -1207,108 +1256,6 @@ function checkout(){
     });
 
     const totalUsd = (total / usdRate).toFixed(2);
-
-    /* =========================
-       MENSAJE SEGÚN COMPRA
-    ========================= */
-
-    let datosExtra = "";
-
-    const tieneEdit = cart.some(item =>
-      item.name.includes("EDIT")
-    );
-
-    const tieneIntro = cart.some(item =>
-      item.name.includes("INTRO")
-    );
-
-    /* SOLO EDITS */
-
-    if(tieneEdit && !tieneIntro){
-
-      datosExtra = `
-🎬 DATOS DEL VIDEO
-
-🎵 Música:
-(Escribir aquí)
-
-🔥 Estilo:
-(Sobrecargado, limpio, neón, fuego, etc.)
-
-📱 Plataforma:
-(TikTok / YouTube)
-
-🎮 Descripción:
-(Escribir aquí)
-`;
-
-    }
-
-    /* SOLO INTROS */
-
-    else if(!tieneEdit && tieneIntro){
-
-      datosExtra = `
-🎨 DATOS DE LA INTRO
-
-🎨 Color principal:
-(Escribir aquí)
-
-🎨 Color secundario:
-(Escribir aquí)
-
-📝 Texto:
-(Escribir aquí)
-
-🛡️ ¿Quiere logo?
-(Sí o no)
-
-⚡ Estilo:
-(Fuego, neón, oscuro, etc.)
-`;
-
-    }
-
-    /* AMBOS */
-
-    else if(tieneEdit && tieneIntro){
-
-      datosExtra = `
-🎬 DATOS DEL VIDEO
-
-🎵 Música:
-(Escribir aquí)
-
-🔥 Estilo:
-(Sobrecargado, limpio, neón, fuego, etc.)
-
-📱 Plataforma:
-(TikTok / YouTube)
-
-🎮 Descripción:
-(Escribir aquí)
-
-━━━━━━━━━━━━━━
-
-🎨 DATOS DE LA INTRO
-
-🎨 Color principal:
-(Escribir aquí)
-
-🎨 Color secundario:
-(Escribir aquí)
-
-📝 Texto:
-(Escribir aquí)
-
-🛡️ ¿Quiere logo?
-(Sí o no)
-
-⚡ Estilo:
-(Fuego, neón, oscuro, etc.)
-`;
-
-    }
 
     /* MENSAJE */
 
@@ -1331,14 +1278,19 @@ $${totalUsd}
 
 ━━━━━━━━━━━━━━
 
-${datosExtra}
+🎬 DATOS DEL VIDEO
+
+🎵 Música:
+(Escribir aquí)
 
 ━━━━━━━━━━━━━━
 
 🔥 MATIX EDITS
 `;
 
-   /* NUMERO */
+
+
+    /* NUMERO */
 
     const numero = "595983744536";
 
